@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -14,11 +15,46 @@ namespace Token_Validator_Windows
 {
     public partial class Form1 : Form
     {
+        [DllImport("user32.dll")]
+        public static extern bool RegisterHotKey(IntPtr hWnd, int id, int fsModifiers, int vlc);
+        [DllImport("user32.dll")]
+        public static extern bool UnregisterHotKey(IntPtr hWnd, int id);
+        [DllImport("user32.dll")]
+        public static extern bool GetCursorPos(out POINT lpPoint);
+
+        public static Point GetCursorPosition()
+        {
+            POINT lpPoint;
+            GetCursorPos(out lpPoint);
+            return lpPoint;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+
+            public static implicit operator Point(POINT point)
+            {
+                return new Point(point.X, point.Y);
+            }
+        }
+
         internal const string MsgHeader = "SCP:SL Token Validator V2";
 
         internal static DecodingOptions DecOpt;
         private static string ApiToken;
         private static bool Authed;
+
+        enum KeyModifier
+        {
+            None = 0,
+            Alt = 1,
+            Control = 2,
+            Shift = 4,
+            WinKey = 8
+        }
 
         public Form1()
         {
@@ -36,6 +72,8 @@ namespace Token_Validator_Windows
             Authed = true;
             authedLabel.Text = "Authenticated using staff API token.";
             authedLabel.ForeColor = Color.DeepSkyBlue;
+
+            RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F12.GetHashCode());
         }
 
         private void scanQR_Click(object sender, EventArgs e)
@@ -177,10 +215,46 @@ namespace Token_Validator_Windows
             scanQR.Enabled = true;
         }
 
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == 0x0312 && m.WParam.ToInt32() == 1)
+            {
+                var pos = GetCursorPosition();
+
+                var screenshot = new Bitmap(650, 650);
+                var graphics = Graphics.FromImage((Image)screenshot);
+                graphics.CopyFromScreen(pos.X - 325, pos.Y - 325, 0, 0, screenshot.Size);
+
+                var bitmap = new Bitmap(screenshot);
+
+                BarcodeReader reader = new BarcodeReader { AutoRotate = false, Options = DecOpt };
+                Result result = reader.Decode(bitmap);
+                if (result == null)
+                {
+                    MessageBox.Show("QR code not found.", MsgHeader, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                string decoded = result.ToString().Trim();
+
+                new Thread(() => Request(decoded)) { IsBackground = true, Name = "Token validation", Priority = ThreadPriority.AboveNormal }.Start();
+            }
+            base.WndProc(ref m);
+        }
+
         public static string Base64Decode(string base64EncodedData)
         {
             var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
+
+        private void CopyUserIDButton_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(userIDLabel.Text);
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            UnregisterHotKey(this.Handle, 1);
         }
     }
 }

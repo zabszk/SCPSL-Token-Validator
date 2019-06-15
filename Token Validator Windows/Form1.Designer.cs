@@ -30,18 +30,21 @@
         {
             this.scanQR = new System.Windows.Forms.Button();
             this.mainPanel = new System.Windows.Forms.Panel();
-            this.statusPanel = new System.Windows.Forms.Panel();
-            this.statusLabel = new System.Windows.Forms.Label();
-            this.fromClipboard = new System.Windows.Forms.Button();
-            this.nicknameLabel = new System.Windows.Forms.Label();
-            this.nicknameLabelHolder = new System.Windows.Forms.Label();
-            this.userIDLabel = new System.Windows.Forms.Label();
-            this.userIDlabelHolder = new System.Windows.Forms.Label();
+            this.authedLabel = new System.Windows.Forms.Label();
             this.expirationLabel = new System.Windows.Forms.Label();
             this.expirationLabelHolder = new System.Windows.Forms.Label();
             this.issuanceLabel = new System.Windows.Forms.Label();
             this.issuanceLabelHolder = new System.Windows.Forms.Label();
-            this.authedLabel = new System.Windows.Forms.Label();
+            this.nicknameLabel = new System.Windows.Forms.Label();
+            this.nicknameLabelHolder = new System.Windows.Forms.Label();
+            this.userIDLabel = new System.Windows.Forms.Label();
+            this.userIDlabelHolder = new System.Windows.Forms.Label();
+            this.fromClipboard = new System.Windows.Forms.Button();
+            this.statusPanel = new System.Windows.Forms.Panel();
+            this.statusLabel = new System.Windows.Forms.Label();
+            this.copyUserIDButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             this.statusPanel.SuspendLayout();
             this.SuspendLayout();
@@ -58,6 +61,9 @@
             // 
             // mainPanel
             // 
+            this.mainPanel.Controls.Add(this.label2);
+            this.mainPanel.Controls.Add(this.label1);
+            this.mainPanel.Controls.Add(this.copyUserIDButton);
             this.mainPanel.Controls.Add(this.authedLabel);
             this.mainPanel.Controls.Add(this.expirationLabel);
             this.mainPanel.Controls.Add(this.expirationLabelHolder);
@@ -75,78 +81,16 @@
             this.mainPanel.Size = new System.Drawing.Size(1045, 410);
             this.mainPanel.TabIndex = 1;
             // 
-            // statusPanel
+            // authedLabel
             // 
-            this.statusPanel.BackColor = System.Drawing.Color.DeepSkyBlue;
-            this.statusPanel.Controls.Add(this.statusLabel);
-            this.statusPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.statusPanel.Location = new System.Drawing.Point(0, 359);
-            this.statusPanel.Name = "statusPanel";
-            this.statusPanel.Size = new System.Drawing.Size(1045, 51);
-            this.statusPanel.TabIndex = 2;
-            // 
-            // statusLabel
-            // 
-            this.statusLabel.BackColor = System.Drawing.Color.Transparent;
-            this.statusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.statusLabel.ForeColor = System.Drawing.SystemColors.Control;
-            this.statusLabel.Location = new System.Drawing.Point(0, 0);
-            this.statusLabel.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
-            this.statusLabel.Name = "statusLabel";
-            this.statusLabel.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
-            this.statusLabel.Size = new System.Drawing.Size(1045, 51);
-            this.statusLabel.TabIndex = 1;
-            this.statusLabel.Text = "Ready";
-            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // fromClipboard
-            // 
-            this.fromClipboard.Location = new System.Drawing.Point(12, 19);
-            this.fromClipboard.Name = "fromClipboard";
-            this.fromClipboard.Size = new System.Drawing.Size(135, 23);
-            this.fromClipboard.TabIndex = 11;
-            this.fromClipboard.Text = "Token from clipboard";
-            this.fromClipboard.UseVisualStyleBackColor = true;
-            this.fromClipboard.Click += new System.EventHandler(this.FromClipboard_Click);
-            // 
-            // nicknameLabel
-            // 
-            this.nicknameLabel.AutoSize = true;
-            this.nicknameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nicknameLabel.Location = new System.Drawing.Point(441, 53);
-            this.nicknameLabel.Name = "nicknameLabel";
-            this.nicknameLabel.Size = new System.Drawing.Size(0, 29);
-            this.nicknameLabel.TabIndex = 15;
-            // 
-            // nicknameLabelHolder
-            // 
-            this.nicknameLabelHolder.AutoSize = true;
-            this.nicknameLabelHolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nicknameLabelHolder.Location = new System.Drawing.Point(308, 53);
-            this.nicknameLabelHolder.Name = "nicknameLabelHolder";
-            this.nicknameLabelHolder.Size = new System.Drawing.Size(127, 29);
-            this.nicknameLabelHolder.TabIndex = 14;
-            this.nicknameLabelHolder.Text = "Nickname:";
-            // 
-            // userIDLabel
-            // 
-            this.userIDLabel.AutoSize = true;
-            this.userIDLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userIDLabel.Location = new System.Drawing.Point(441, 12);
-            this.userIDLabel.Name = "userIDLabel";
-            this.userIDLabel.Size = new System.Drawing.Size(0, 29);
-            this.userIDLabel.TabIndex = 13;
-            // 
-            // userIDlabelHolder
-            // 
-            this.userIDlabelHolder.AutoSize = true;
-            this.userIDlabelHolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.userIDlabelHolder.Location = new System.Drawing.Point(342, 12);
-            this.userIDlabelHolder.Name = "userIDlabelHolder";
-            this.userIDlabelHolder.Size = new System.Drawing.Size(93, 29);
-            this.userIDlabelHolder.TabIndex = 12;
-            this.userIDlabelHolder.Text = "UserID:";
+            this.authedLabel.AutoSize = true;
+            this.authedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.authedLabel.ForeColor = System.Drawing.Color.Crimson;
+            this.authedLabel.Location = new System.Drawing.Point(3, 338);
+            this.authedLabel.Name = "authedLabel";
+            this.authedLabel.Size = new System.Drawing.Size(256, 18);
+            this.authedLabel.TabIndex = 20;
+            this.authedLabel.Text = "Not authenticated, using API as guest.";
             // 
             // expirationLabel
             // 
@@ -186,16 +130,106 @@
             this.issuanceLabelHolder.TabIndex = 16;
             this.issuanceLabelHolder.Text = "Token issuance date:";
             // 
-            // authedLabel
+            // nicknameLabel
             // 
-            this.authedLabel.AutoSize = true;
-            this.authedLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.authedLabel.ForeColor = System.Drawing.Color.Crimson;
-            this.authedLabel.Location = new System.Drawing.Point(3, 338);
-            this.authedLabel.Name = "authedLabel";
-            this.authedLabel.Size = new System.Drawing.Size(256, 18);
-            this.authedLabel.TabIndex = 20;
-            this.authedLabel.Text = "Not authenticated, using API as guest.";
+            this.nicknameLabel.AutoSize = true;
+            this.nicknameLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nicknameLabel.Location = new System.Drawing.Point(441, 53);
+            this.nicknameLabel.Name = "nicknameLabel";
+            this.nicknameLabel.Size = new System.Drawing.Size(0, 29);
+            this.nicknameLabel.TabIndex = 15;
+            // 
+            // nicknameLabelHolder
+            // 
+            this.nicknameLabelHolder.AutoSize = true;
+            this.nicknameLabelHolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.nicknameLabelHolder.Location = new System.Drawing.Point(308, 53);
+            this.nicknameLabelHolder.Name = "nicknameLabelHolder";
+            this.nicknameLabelHolder.Size = new System.Drawing.Size(127, 29);
+            this.nicknameLabelHolder.TabIndex = 14;
+            this.nicknameLabelHolder.Text = "Nickname:";
+            // 
+            // userIDLabel
+            // 
+            this.userIDLabel.AutoSize = true;
+            this.userIDLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userIDLabel.Location = new System.Drawing.Point(441, 12);
+            this.userIDLabel.Name = "userIDLabel";
+            this.userIDLabel.Size = new System.Drawing.Size(0, 29);
+            this.userIDLabel.TabIndex = 13;
+            // 
+            // userIDlabelHolder
+            // 
+            this.userIDlabelHolder.AutoSize = true;
+            this.userIDlabelHolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.userIDlabelHolder.Location = new System.Drawing.Point(342, 12);
+            this.userIDlabelHolder.Name = "userIDlabelHolder";
+            this.userIDlabelHolder.Size = new System.Drawing.Size(93, 29);
+            this.userIDlabelHolder.TabIndex = 12;
+            this.userIDlabelHolder.Text = "UserID:";
+            // 
+            // fromClipboard
+            // 
+            this.fromClipboard.Location = new System.Drawing.Point(12, 19);
+            this.fromClipboard.Name = "fromClipboard";
+            this.fromClipboard.Size = new System.Drawing.Size(135, 23);
+            this.fromClipboard.TabIndex = 11;
+            this.fromClipboard.Text = "Token from clipboard";
+            this.fromClipboard.UseVisualStyleBackColor = true;
+            this.fromClipboard.Click += new System.EventHandler(this.FromClipboard_Click);
+            // 
+            // statusPanel
+            // 
+            this.statusPanel.BackColor = System.Drawing.Color.DeepSkyBlue;
+            this.statusPanel.Controls.Add(this.statusLabel);
+            this.statusPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.statusPanel.Location = new System.Drawing.Point(0, 359);
+            this.statusPanel.Name = "statusPanel";
+            this.statusPanel.Size = new System.Drawing.Size(1045, 51);
+            this.statusPanel.TabIndex = 2;
+            // 
+            // statusLabel
+            // 
+            this.statusLabel.BackColor = System.Drawing.Color.Transparent;
+            this.statusLabel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statusLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.statusLabel.ForeColor = System.Drawing.SystemColors.Control;
+            this.statusLabel.Location = new System.Drawing.Point(0, 0);
+            this.statusLabel.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            this.statusLabel.Name = "statusLabel";
+            this.statusLabel.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.statusLabel.Size = new System.Drawing.Size(1045, 51);
+            this.statusLabel.TabIndex = 1;
+            this.statusLabel.Text = "Ready";
+            this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // copyUserIDButton
+            // 
+            this.copyUserIDButton.Location = new System.Drawing.Point(12, 100);
+            this.copyUserIDButton.Name = "copyUserIDButton";
+            this.copyUserIDButton.Size = new System.Drawing.Size(135, 23);
+            this.copyUserIDButton.TabIndex = 21;
+            this.copyUserIDButton.Text = "Copy UserID";
+            this.copyUserIDButton.UseVisualStyleBackColor = true;
+            this.copyUserIDButton.Click += new System.EventHandler(this.CopyUserIDButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(706, 320);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(327, 13);
+            this.label1.TabIndex = 22;
+            this.label1.Text = "Press ALT + F12 to scan QR from screen around the mouse pointer.";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(898, 342);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(135, 13);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "Created by Łukasz Jurczyk";
             // 
             // Form1
             // 
@@ -204,8 +238,11 @@
             this.ClientSize = new System.Drawing.Size(1045, 410);
             this.Controls.Add(this.statusPanel);
             this.Controls.Add(this.mainPanel);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
             this.Name = "Form1";
             this.Text = "SCP:SL Token Validator V2";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
             this.statusPanel.ResumeLayout(false);
@@ -229,6 +266,9 @@
         private System.Windows.Forms.Label issuanceLabel;
         private System.Windows.Forms.Label issuanceLabelHolder;
         private System.Windows.Forms.Label authedLabel;
+        private System.Windows.Forms.Button copyUserIDButton;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
     }
 }
 
