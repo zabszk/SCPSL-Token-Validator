@@ -155,7 +155,7 @@ namespace Token_Validator_Windows
                 if (decoded["newToken"] == "false")
                 {
                     statusLabel.Text = "Signature verification successful, token is old.";
-                    statusPanel.BackColor = Color.LightGoldenrodYellow;
+                    statusPanel.BackColor = Color.MediumAquamarine;
                 }
                 else
                 {
@@ -173,7 +173,7 @@ namespace Token_Validator_Windows
                 if (decoded["newToken"] == "false")
                 {
                     statusLabel.Text = "Signature verification successful, token is old.";
-                    statusPanel.BackColor = Color.LightGoldenrodYellow;
+                    statusPanel.BackColor = Color.MediumAquamarine;
                 }
                 else
                 {
@@ -221,9 +221,9 @@ namespace Token_Validator_Windows
             {
                 var pos = GetCursorPosition();
 
-                var screenshot = new Bitmap(650, 650);
+                var screenshot = new Bitmap(900, 900);
                 var graphics = Graphics.FromImage((Image)screenshot);
-                graphics.CopyFromScreen(pos.X - 325, pos.Y - 325, 0, 0, screenshot.Size);
+                graphics.CopyFromScreen(pos.X - 450, pos.Y - 450, 0, 0, screenshot.Size);
 
                 var bitmap = new Bitmap(screenshot);
 
