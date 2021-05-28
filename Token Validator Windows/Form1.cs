@@ -122,7 +122,7 @@ namespace Token_Validator_Windows
             statusPanel.BackColor = Color.DarkGray;
 
             var decoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(HttpQuery.Post(
-                "https://api.scpslgame.com/v2/tools/validatetoken.php",
+                "https://api.scpslgame.com/v4/tools/validatetoken.php",
                 $"auth={WebUtility.UrlEncode(auth)}" + (Authed ? "&token=" + ApiToken : "")));
 
             if (decoded["success"] == "false")
