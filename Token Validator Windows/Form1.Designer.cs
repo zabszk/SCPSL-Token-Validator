@@ -30,6 +30,9 @@
         {
             this.scanQR = new System.Windows.Forms.Button();
             this.mainPanel = new System.Windows.Forms.Panel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.copyUserIDButton = new System.Windows.Forms.Button();
             this.authedLabel = new System.Windows.Forms.Label();
             this.expirationLabel = new System.Windows.Forms.Label();
             this.expirationLabelHolder = new System.Windows.Forms.Label();
@@ -42,9 +45,6 @@
             this.fromClipboard = new System.Windows.Forms.Button();
             this.statusPanel = new System.Windows.Forms.Panel();
             this.statusLabel = new System.Windows.Forms.Label();
-            this.copyUserIDButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.mainPanel.SuspendLayout();
             this.statusPanel.SuspendLayout();
             this.SuspendLayout();
@@ -80,6 +80,34 @@
             this.mainPanel.Name = "mainPanel";
             this.mainPanel.Size = new System.Drawing.Size(1045, 410);
             this.mainPanel.TabIndex = 1;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(898, 342);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(135, 13);
+            this.label2.TabIndex = 23;
+            this.label2.Text = "Created by Łukasz Jurczyk";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(706, 320);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(327, 13);
+            this.label1.TabIndex = 22;
+            this.label1.Text = "Press ALT + F12 to scan QR from screen around the mouse pointer.";
+            // 
+            // copyUserIDButton
+            // 
+            this.copyUserIDButton.Location = new System.Drawing.Point(12, 100);
+            this.copyUserIDButton.Name = "copyUserIDButton";
+            this.copyUserIDButton.Size = new System.Drawing.Size(135, 23);
+            this.copyUserIDButton.TabIndex = 21;
+            this.copyUserIDButton.Text = "Copy UserID";
+            this.copyUserIDButton.UseVisualStyleBackColor = true;
+            this.copyUserIDButton.Click += new System.EventHandler(this.CopyUserIDButton_Click);
             // 
             // authedLabel
             // 
@@ -203,34 +231,6 @@
             this.statusLabel.Text = "Ready";
             this.statusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // copyUserIDButton
-            // 
-            this.copyUserIDButton.Location = new System.Drawing.Point(12, 100);
-            this.copyUserIDButton.Name = "copyUserIDButton";
-            this.copyUserIDButton.Size = new System.Drawing.Size(135, 23);
-            this.copyUserIDButton.TabIndex = 21;
-            this.copyUserIDButton.Text = "Copy UserID";
-            this.copyUserIDButton.UseVisualStyleBackColor = true;
-            this.copyUserIDButton.Click += new System.EventHandler(this.CopyUserIDButton_Click);
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(706, 320);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(327, 13);
-            this.label1.TabIndex = 22;
-            this.label1.Text = "Press ALT + F12 to scan QR from screen around the mouse pointer.";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(898, 342);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(135, 13);
-            this.label2.TabIndex = 23;
-            this.label2.Text = "Created by Łukasz Jurczyk";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -241,13 +241,12 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "SCP:SL Token Validator V2";
+            this.Text = "SCP:SL Token Validator v. 2.0.3";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();
             this.statusPanel.ResumeLayout(false);
             this.ResumeLayout(false);
-
         }
 
         #endregion

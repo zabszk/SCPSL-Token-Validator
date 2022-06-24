@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -41,13 +42,13 @@ namespace Token_Validator_Windows
             }
         }
 
-        internal const string MsgHeader = "SCP:SL Token Validator V2";
+        private const string MsgHeader = "SCP:SL Token Validator v. 2.0.3";
 
-        internal static DecodingOptions DecOpt;
+        private static DecodingOptions DecOpt;
         private static string ApiToken;
         private static bool Authed;
 
-        enum KeyModifier
+        private enum KeyModifier
         {
             None = 0,
             Alt = 1,
@@ -61,7 +62,7 @@ namespace Token_Validator_Windows
             InitializeComponent();
             CheckForIllegalCrossThreadCalls = false;
 
-            DecOpt = new DecodingOptions()
+            DecOpt = new DecodingOptions
             {
                 PossibleFormats = new[] { BarcodeFormat.QR_CODE },
                 TryHarder = true
@@ -73,18 +74,18 @@ namespace Token_Validator_Windows
             authedLabel.Text = "Authenticated using staff API token.";
             authedLabel.ForeColor = Color.DeepSkyBlue;
 
-            RegisterHotKey(this.Handle, 1, (int)KeyModifier.Alt, Keys.F12.GetHashCode());
+            RegisterHotKey(Handle, 1, (int)KeyModifier.Alt, Keys.F12.GetHashCode());
         }
 
         private void scanQR_Click(object sender, EventArgs e)
         {
-            this.Visible = false;
+            Visible = false;
             Thread.Sleep(150);
             var screens = Screen.AllScreens;
             foreach (var screen in screens)
             {
                 var screenshot = new Bitmap(screen.Bounds.Width, screen.Bounds.Height);
-                var graphics = Graphics.FromImage((Image)screenshot);
+                var graphics = Graphics.FromImage(screenshot);
                 graphics.CopyFromScreen(screen.Bounds.Left, screen.Bounds.Top, 0, 0, screenshot.Size);
 
                 var bitmap = new Bitmap(screenshot);
@@ -95,12 +96,12 @@ namespace Token_Validator_Windows
                 string decoded = result.ToString().Trim();
 
                 new Thread(() => Request(decoded)){IsBackground = true, Name = "Token validation", Priority = ThreadPriority.AboveNormal}.Start();
-                this.Visible = true;
+                Visible = true;
                 return;
             }
 
             MessageBox.Show("QR code not found.", MsgHeader, MessageBoxButtons.OK, MessageBoxIcon.Error);
-            this.Visible = true;
+            Visible = true;
         }
 
         private void FromClipboard_Click(object sender, EventArgs e)
@@ -121,94 +122,103 @@ namespace Token_Validator_Windows
             statusLabel.Text = "Token validation in progress...";
             statusPanel.BackColor = Color.DarkGray;
 
-            var decoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(HttpQuery.Post(
-                "https://api.scpslgame.com/v4/tools/validatetoken.php",
-                $"auth={WebUtility.UrlEncode(auth)}" + (Authed ? "&token=" + ApiToken : "")));
-
-            if (decoded["success"] == "false")
+            try
             {
-                statusLabel.Text = "Error: " + decoded["error"];
-                statusPanel.BackColor = Color.Crimson;
+                var decoded = JsonConvert.DeserializeObject<Dictionary<string, string>>(HttpQuery.Post(
+                    "https://api.scpslgame.com/v5/tools/validatetoken.php",
+                    $"auth={WebUtility.UrlEncode(auth)}" + (Authed ? "&token=" + ApiToken : "")));
 
-                fromClipboard.Enabled = true;
-                scanQR.Enabled = true;
-                return;
-            }
-
-            if (decoded["verified"] == "false")
-            {
-                statusLabel.Text = "Digital signature invalid";
-                statusPanel.BackColor = Color.Crimson;
-
-                fromClipboard.Enabled = true;
-                scanQR.Enabled = true;
-                return;
-            }
-
-            userIDLabel.Text = decoded["UserID"];
-            nicknameLabel.Text = Base64Decode(decoded["Nickname"]);
-            issuanceLabel.Text = decoded["Issuance time"];
-            expirationLabel.Text = decoded["Expiration time"];
-
-            if (!decoded.ContainsKey("clean") || !decoded.ContainsKey("GlobalBan"))
-            {
-                if (decoded["newToken"] == "false")
+                if (decoded["success"] == "false")
                 {
-                    statusLabel.Text = "Signature verification successful, token is old.";
-                    statusPanel.BackColor = Color.MediumAquamarine;
-                }
-                else
-                {
-                    statusLabel.Text = "Signature verification successful";
-                    statusPanel.BackColor = Color.DeepSkyBlue;
+                    statusLabel.Text = "Error: " + decoded["error"];
+                    statusPanel.BackColor = Color.Crimson;
+
+                    fromClipboard.Enabled = true;
+                    scanQR.Enabled = true;
+                    return;
                 }
 
-                fromClipboard.Enabled = true;
-                scanQR.Enabled = true;
-                return;
-            }
+                if (decoded["verified"] == "false")
+                {
+                    statusLabel.Text = "Digital signature invalid";
+                    statusPanel.BackColor = Color.Crimson;
 
-            if (decoded["clean"] == "true")
-            {
-                if (decoded["newToken"] == "false")
-                {
-                    statusLabel.Text = "Signature verification successful, token is old.";
-                    statusPanel.BackColor = Color.MediumAquamarine;
+                    fromClipboard.Enabled = true;
+                    scanQR.Enabled = true;
+                    return;
                 }
-                else
-                {
-                    statusLabel.Text = "Signature verification successful, not banned in any game, token is old.";
-                    statusPanel.BackColor = Color.Teal;
-                }
-            }
-            else
-            {
-                if (decoded["GlobalBan"] == "true")
+
+                userIDLabel.Text = decoded["UserID"];
+                nicknameLabel.Text = Base64Decode(decoded["Nickname"]);
+                issuanceLabel.Text = decoded["Issuance time"];
+                expirationLabel.Text = decoded["Expiration time"];
+
+                if (!decoded.ContainsKey("clean") || !decoded.ContainsKey("GlobalBan"))
                 {
                     if (decoded["newToken"] == "false")
                     {
-                        statusLabel.Text = "Signature verification successful, banned in SCP:SL, token is old.";
-                        statusPanel.BackColor = Color.OrangeRed;
+                        statusLabel.Text = "Signature verification successful, token is old.";
+                        statusPanel.BackColor = Color.MediumAquamarine;
                     }
                     else
                     {
-                        statusLabel.Text = "Signature verification successful, banned in SCP:SL.";
-                        statusPanel.BackColor = Color.OrangeRed;
+                        statusLabel.Text = "Signature verification successful";
+                        statusPanel.BackColor = Color.DeepSkyBlue;
+                    }
+
+                    fromClipboard.Enabled = true;
+                    scanQR.Enabled = true;
+                    return;
+                }
+
+                if (decoded["clean"] == "true")
+                {
+                    if (decoded["newToken"] == "false")
+                    {
+                        statusLabel.Text = "Signature verification successful, token is old.";
+                        statusPanel.BackColor = Color.MediumAquamarine;
+                    }
+                    else
+                    {
+                        statusLabel.Text = "Signature verification successful, not banned in any game, token is old.";
+                        statusPanel.BackColor = Color.Teal;
                     }
                 }
                 else
                 {
-                    if (decoded["newToken"] == "false")
+                    if (decoded["GlobalBan"] == "true")
                     {
-                        statusLabel.Text = "Signature verification successful, banned in other games, token is old.";
-                        statusPanel.BackColor = Color.DarkOrange;
+                        if (decoded["newToken"] == "false")
+                        {
+                            statusLabel.Text = "Signature verification successful, banned in SCP:SL, token is old.";
+                            statusPanel.BackColor = Color.OrangeRed;
+                        }
+                        else
+                        {
+                            statusLabel.Text = "Signature verification successful, banned in SCP:SL.";
+                            statusPanel.BackColor = Color.OrangeRed;
+                        }
                     }
                     else
                     {
-                        statusLabel.Text = "Signature verification successful, banned in other games.";
-                        statusPanel.BackColor = Color.Orange;
+                        if (decoded["newToken"] == "false")
+                        {
+                            statusLabel.Text =
+                                "Signature verification successful, banned in other games, token is old.";
+                            statusPanel.BackColor = Color.DarkOrange;
+                        }
+                        else
+                        {
+                            statusLabel.Text = "Signature verification successful, banned in other games.";
+                            statusPanel.BackColor = Color.Orange;
+                        }
                     }
                 }
+            }
+            catch
+            {
+                statusLabel.Text = "Token validation failed (exception).";
+                statusPanel.BackColor = Color.DarkGray;
             }
 
             fromClipboard.Enabled = true;
@@ -222,7 +232,7 @@ namespace Token_Validator_Windows
                 var pos = GetCursorPosition();
 
                 var screenshot = new Bitmap(900, 900);
-                var graphics = Graphics.FromImage((Image)screenshot);
+                var graphics = Graphics.FromImage(screenshot);
                 graphics.CopyFromScreen(pos.X - 450, pos.Y - 450, 0, 0, screenshot.Size);
 
                 var bitmap = new Bitmap(screenshot);
@@ -241,10 +251,10 @@ namespace Token_Validator_Windows
             base.WndProc(ref m);
         }
 
-        public static string Base64Decode(string base64EncodedData)
+        private static string Base64Decode(string base64EncodedData)
         {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+            var base64EncodedBytes = Convert.FromBase64String(base64EncodedData);
+            return Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
         private void CopyUserIDButton_Click(object sender, EventArgs e)
@@ -254,7 +264,7 @@ namespace Token_Validator_Windows
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            UnregisterHotKey(this.Handle, 1);
+            UnregisterHotKey(Handle, 1);
         }
     }
 }
