@@ -241,7 +241,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Form1";
-            this.Text = "SCP:SL Token Validator v. 2.0.3";
+            this.Text = "SCP:SL Token Validator v. 2.0.4";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.mainPanel.ResumeLayout(false);
             this.mainPanel.PerformLayout();

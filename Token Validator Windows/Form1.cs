@@ -42,7 +42,7 @@ namespace Token_Validator_Windows
             }
         }
 
-        private const string MsgHeader = "SCP:SL Token Validator v. 2.0.3";
+        private const string MsgHeader = "SCP:SL Token Validator v. 2.0.4";
 
         private static DecodingOptions DecOpt;
         private static string ApiToken;
